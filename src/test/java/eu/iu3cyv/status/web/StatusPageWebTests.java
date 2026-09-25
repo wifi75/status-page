@@ -42,6 +42,9 @@ class StatusPageWebTests {
 
     @Test
     void unknownPathsAreDenied() throws Exception {
-        mvc.perform(get("/actuator/env")).andExpect(status().is4xxClientError());
+        // l'anonimo viene rimandato al login: il contenuto non viene mai servito
+        mvc.perform(get("/actuator/env"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", containsString("/login")));
     }
 }
