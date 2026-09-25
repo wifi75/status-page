@@ -58,6 +58,9 @@ public class Monitor {
     @Column(name = "last_message", length = 300)
     private String lastMessage;
 
+    @Column(name = "cert_expires_at")
+    private Instant certExpiresAt;
+
     protected Monitor() {
     }
 
@@ -75,6 +78,7 @@ public class Monitor {
             this.lastCheckedAt = null;
             this.lastResponseMs = null;
             this.lastMessage = null;
+            this.certExpiresAt = null;
         }
         this.name = name;
         this.type = type;
@@ -89,6 +93,10 @@ public class Monitor {
         this.lastCheckedAt = at;
         this.lastResponseMs = outcome.responseMs();
         this.lastMessage = outcome.message();
+        // se il servizio è giù si tiene l'ultima scadenza nota
+        if (outcome.certExpiresAt() != null) {
+            this.certExpiresAt = outcome.certExpiresAt();
+        }
     }
 
     boolean isDue(Instant now) {
@@ -107,4 +115,5 @@ public class Monitor {
     public Instant getLastCheckedAt() { return lastCheckedAt; }
     public Integer getLastResponseMs() { return lastResponseMs; }
     public String getLastMessage() { return lastMessage; }
+    public Instant getCertExpiresAt() { return certExpiresAt; }
 }

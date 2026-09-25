@@ -8,8 +8,8 @@
 ## Fase 2 — controlli e storico
 - [x] Controlli pianificati HTTP, TCP, scadenza certificato TLS (virtual thread)
 - [x] Tabella risultati, stato attuale, tempi di risposta
-- [ ] Barra dei 90 giorni e percentuale di disponibilità
-- [ ] Pulizia automatica dei risultati vecchi
+- [x] Barra dei 90 giorni e percentuale di disponibilità
+- [x] Pulizia automatica dei risultati vecchi
 
 ## Fase 3 — admin, incidenti, notifiche
 - [x] CRUD servizi con validazione

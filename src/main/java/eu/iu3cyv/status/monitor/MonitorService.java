@@ -3,7 +3,10 @@ package eu.iu3cyv.status.monitor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -12,10 +15,13 @@ public class MonitorService {
 
     private final MonitorRepository repository;
     private final CheckResultRepository checkResults;
+    private final DailyStatRepository dailyStats;
 
-    public MonitorService(MonitorRepository repository, CheckResultRepository checkResults) {
+    public MonitorService(MonitorRepository repository, CheckResultRepository checkResults,
+                          DailyStatRepository dailyStats) {
         this.repository = repository;
         this.checkResults = checkResults;
+        this.dailyStats = dailyStats;
     }
 
     /** Dati minimi per eseguire un controllo fuori transazione. */
@@ -23,11 +29,8 @@ public class MonitorService {
     }
 
     @Transactional(readOnly = true)
-    public List<MonitorView> publicMonitors() {
-        return repository.findByEnabledTrueOrderByDisplayOrderAscNameAsc()
-                .stream()
-                .map(MonitorView::of)
-                .toList();
+    public List<Monitor> publicMonitors() {
+        return repository.findByEnabledTrueOrderByDisplayOrderAscNameAsc();
     }
 
     @Transactional(readOnly = true)
@@ -71,7 +74,19 @@ public class MonitorService {
         repository.findById(monitorId).ifPresent(monitor -> {
             monitor.recordCheck(outcome, at);
             checkResults.save(new CheckResult(monitorId, outcome, at));
+            var day = LocalDate.ofInstant(at, ZoneId.systemDefault());
+            var stat = dailyStats.findByMonitorIdAndDay(monitorId, day)
+                    .orElseGet(() -> new DailyStat(monitorId, day));
+            stat.count(outcome.status());
+            dailyStats.save(stat);
         });
+    }
+
+    /** Il dettaglio serve solo per il grafico delle 24 ore; i riepiloghi giornalieri durano 90+ giorni. */
+    @Transactional
+    public void purgeOldData(Instant now) {
+        checkResults.deleteOlderThan(now.minus(Duration.ofDays(2)));
+        dailyStats.deleteOlderThan(LocalDate.ofInstant(now, ZoneId.systemDefault()).minusDays(100));
     }
 
     private static void apply(Monitor monitor, MonitorForm form) {

@@ -3,24 +3,25 @@
 <head th:replace="~{fragments/layout :: head('Accesso')}"></head>
 <body>
 <main class="wrap narrow">
-    <header class="site-header">
-        <h1>Accesso amministratore</h1>
-    </header>
+    <header th:replace="~{fragments/layout :: top(false)}"></header>
+
+    <h2 class="sec-title"><span>Accesso amministratore</span></h2>
 
     <p class="field-error" th:if="${param.error}" role="alert">Nome utente o password non corretti.</p>
     <p class="notice" th:if="${param.logout}" role="status">Sei uscito.</p>
 
-    <form class="card form" method="post" th:action="@{/login}">
+    <form class="panel form" method="post" th:action="@{/login}">
         <label for="username">Nome utente</label>
         <input id="username" name="username" type="text" autocomplete="username" required autofocus>
 
         <label for="password">Password</label>
         <input id="password" name="password" type="password" autocomplete="current-password" required>
 
-        <button type="submit" class="btn">Entra</button>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Entra</button>
+            <a class="btn btn-ghost" th:href="@{/}">Torna alla pagina pubblica</a>
+        </div>
     </form>
-
-    <p><a class="btn-link" th:href="@{/}">Torna alla pagina pubblica</a></p>
 </main>
 </body>
 </html>

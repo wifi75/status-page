@@ -45,6 +45,11 @@ public class CheckScheduler {
         }
     }
 
+    @Scheduled(cron = "0 17 3 * * *")
+    public void purge() {
+        monitorService.purgeOldData(Instant.now());
+    }
+
     private record Done(MonitorService.DueMonitor monitor, CheckOutcome outcome) {
     }
 }

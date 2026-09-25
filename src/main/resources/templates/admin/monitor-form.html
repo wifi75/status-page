@@ -2,13 +2,12 @@
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head(${monitorId == null} ? 'Nuovo servizio' : 'Modifica servizio')}"></head>
 <body>
-<main class="wrap">
-    <header class="site-header">
-        <h1 th:text="${monitorId == null} ? 'Nuovo servizio' : 'Modifica servizio'">Nuovo servizio</h1>
-        <a class="btn-link" th:href="@{/admin}">Annulla</a>
-    </header>
+<main class="wrap narrow">
+    <header th:replace="~{fragments/layout :: top(false)}"></header>
 
-    <form class="card form" method="post" th:object="${form}"
+    <h2 class="sec-title"><span th:text="${monitorId == null} ? 'Nuovo servizio' : 'Modifica servizio'">Nuovo servizio</span></h2>
+
+    <form class="panel form" method="post" th:object="${form}"
           th:action="${monitorId == null} ? @{/admin/monitors} : @{/admin/monitors/{id}(id=${monitorId})}">
 
         <label for="name">Nome mostrato al pubblico</label>
@@ -17,38 +16,40 @@
 
         <label for="type">Tipo di controllo</label>
         <select id="type" th:field="*{type}">
-            <option th:each="t : ${types}" th:value="${t}" th:text="${t.label()}">HTTP</option>
+            <option th:each="t : ${types}" th:value="${t}" th:text="${t.label()}">Sito web</option>
         </select>
 
-        <label for="target">Indirizzo da controllare <span class="hint">(non viene mostrato al pubblico)</span></label>
-        <input id="target" type="text" th:field="*{target}" maxlength="500" required
-               placeholder="https://esempio.it · 192.168.1.10:22 · esempio.it">
+        <label for="target">Indirizzo <span class="hint">· resta privato</span></label>
+        <input id="target" type="text" th:field="*{target}" maxlength="500" required placeholder="https://esempio.it">
         <ul class="hint-list">
-            <li th:each="t : ${types}"><strong th:text="${t.label()}">HTTP</strong>: <span th:text="${t.hint()}">https://esempio.it</span></li>
+            <li th:each="t : ${types}" th:text="${t.label() + ': ' + t.hint()}">Sito web: https://esempio.it</li>
         </ul>
         <p class="field-error" th:if="${#fields.hasErrors('target')}" th:errors="*{target}"></p>
 
         <div class="row">
-            <div>
-                <label for="intervalSeconds">Controlla ogni (secondi)</label>
+            <div class="form">
+                <label for="intervalSeconds">Ogni (secondi)</label>
                 <input id="intervalSeconds" type="number" min="30" max="3600" th:field="*{intervalSeconds}">
                 <p class="field-error" th:if="${#fields.hasErrors('intervalSeconds')}" th:errors="*{intervalSeconds}"></p>
             </div>
-            <div>
+            <div class="form">
                 <label for="displayOrder">Ordine in pagina</label>
                 <input id="displayOrder" type="number" min="0" th:field="*{displayOrder}">
                 <p class="field-error" th:if="${#fields.hasErrors('displayOrder')}" th:errors="*{displayOrder}"></p>
             </div>
         </div>
 
-        <label class="check"><input type="checkbox" th:field="*{enabled}"> Attivo (controllato e visibile al pubblico)</label>
+        <label class="check"><input type="checkbox" th:field="*{enabled}"> Attivo: controllato e visibile al pubblico</label>
 
-        <button type="submit" class="btn">Salva</button>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Salva</button>
+            <a class="btn btn-secondary" th:href="@{/admin}">Annulla</a>
+        </div>
     </form>
 
     <form th:if="${monitorId != null}" method="post" class="danger-zone"
           th:action="@{/admin/monitors/{id}/delete(id=${monitorId})}">
-        <button type="submit" class="btn-danger">Elimina servizio e storico</button>
+        <button type="submit" class="btn btn-danger">Elimina servizio e storico</button>
     </form>
 </main>
 </body>

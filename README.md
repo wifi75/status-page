@@ -26,6 +26,7 @@ L'indirizzo resta privato: sulla pagina pubblica compaiono solo nome, stato e te
 | Database | SQLite 3.53 (file unico, modalità WAL) |
 | Migrazioni | Flyway |
 | Test | JUnit 5 + MockMvc |
+| Font | Space Grotesk, JetBrains Mono (SIL OFL 1.1, self-hosted) |
 
 ## Sviluppo locale
 

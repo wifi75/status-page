@@ -9,6 +9,7 @@ services:
       ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
       ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-}
       STATUS_SITE_TITLE: ${STATUS_SITE_TITLE:-Stato dei servizi}
+      STATUS_BADGE: ${STATUS_BADGE:-}
       TZ: Europe/Rome
     volumes:
       # database SQLite: è l'unica cosa da salvare nei backup

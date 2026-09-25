@@ -1,0 +1,111 @@
+/*
+ * Design token — direzione "Console radio" (console industriale).
+ * Fondo scuro nativo, colore solo come semantica di stato, valori in monospazio.
+ * Nessun componente scrive colori, raggi o durate a mano: tutto passa da qui.
+ *
+ *  1 Direzione   console industriale: si guarda come un pannello di monitoraggio
+ *  2 Palette     verde segnale come primario (l'idea di "portante presente"), neutri tinti di verde
+ *  3 Tipografia  Space Grotesk (titoli e testo) + JetBrains Mono (misure, orari, codici)
+ *  4 Geometria   raggio 4/6 px, bordi 1 px, controlli alti 40 px
+ *  5 Densità     media, scala 4 px
+ *  6 Profondità  bordo + tinta, nessuna ombra; le spie emettono luce (glow)
+ *  7 Pulsanti    primario pieno, secondario a contorno, fantasma, distruttivo
+ *  8 Movimento   120/200/320 ms; la spia pulsa solo per dire "vivo"
+ */
+
+@font-face { font-family: "Space Grotesk"; src: url("../fonts/space-grotesk-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Space Grotesk"; src: url("../fonts/space-grotesk-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Space Grotesk"; src: url("../fonts/space-grotesk-700.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("../fonts/jetbrains-mono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("../fonts/jetbrains-mono-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+
+:root {
+    color-scheme: dark;
+
+    /* primario: verde segnale, ramp 50→900 */
+    --signal-50: #e8fdf3;
+    --signal-100: #c3f9df;
+    --signal-200: #8ff4c3;
+    --signal-300: #5cf0ad;
+    --signal-400: #3ef0a1;
+    --signal-500: #1fd487;
+    --signal-600: #10a86a;
+    --signal-700: #0b7d50;
+    --signal-800: #0a5a3b;
+    --signal-900: #073a27;
+
+    /* neutri tinti verso il verde, non grigi puri */
+    --bg: #0a0f0d;
+    --surface: #111a16;
+    --raised: #172420;
+    --line: #1f3029;
+    --line-strong: #2c4639;
+    --text: #e3efe8;
+    --muted: #8aa497;
+
+    --accent: var(--signal-400);
+    --accent-soft: rgba(62, 240, 161, .12);
+    --on-accent: #04130c;
+
+    /* semantici: il verde "operativo" è la stessa luce del primario, gli altri si distinguono per tinta */
+    --ok: var(--signal-400);
+    --warn: #ffb547;
+    --down: #ff5d6c;
+    --idle: #5d7569;
+    --nodata: #1d2a25;
+
+    --f-display: "Space Grotesk", system-ui, sans-serif;
+    --f-text: "Space Grotesk", system-ui, sans-serif;
+    --f-mono: "JetBrains Mono", ui-monospace, monospace;
+
+    /* scala tipografica */
+    --fs-xs: 11px;
+    --fs-sm: 13px;
+    --fs-md: 15px;
+    --fs-lg: 17px;
+    --fs-xl: 22px;
+    --fs-2xl: 30px;
+
+    /* spaziatura (unità 4 px) */
+    --s-1: 4px;
+    --s-2: 8px;
+    --s-3: 12px;
+    --s-4: 16px;
+    --s-5: 20px;
+    --s-6: 24px;
+    --s-8: 32px;
+    --s-12: 48px;
+
+    --r: 4px;
+    --r-lg: 6px;
+    --control-h: 40px;
+    --glow: 0 0 12px;
+
+    --t-fast: 120ms;
+    --t-base: 200ms;
+    --t-slow: 320ms;
+    --ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+/* modalità chiara: stesso carattere, luci più scure per restare leggibili su carta */
+@media (prefers-color-scheme: light) {
+    :root {
+        color-scheme: light;
+        --bg: #eef3f0;
+        --surface: #f8fbf9;
+        --raised: #ffffff;
+        --line: #d3ded8;
+        --line-strong: #9fb5aa;
+        --text: #0d1a14;
+        --muted: #4f6559;
+        --accent: var(--signal-700);
+        --accent-soft: rgba(11, 125, 80, .10);
+        --on-accent: #ffffff;
+        --ok: var(--signal-600);
+        --warn: #b56d00;
+        --down: #d0283a;
+        --idle: #8aa497;
+        --nodata: #dce6e0;
+        --glow: 0 0 0;
+    }
+}

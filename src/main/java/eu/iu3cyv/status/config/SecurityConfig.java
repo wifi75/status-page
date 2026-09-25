@@ -26,7 +26,7 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/css/**", "/favicon.svg", "/error", "/actuator/health").permitAll()
+                        .requestMatchers("/", "/css/**", "/js/**", "/fonts/**", "/favicon.svg", "/error", "/actuator/health").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().denyAll())
                 .formLogin(form -> form.loginPage("/login").permitAll().defaultSuccessUrl("/admin", true))

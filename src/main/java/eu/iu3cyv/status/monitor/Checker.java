@@ -13,7 +13,6 @@ import java.net.http.HttpResponse;
 import java.security.cert.X509Certificate;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 
 /** Esegue i controlli di rete. Nessun accesso al database: gira in parallelo. */
 @Component
@@ -50,7 +49,16 @@ public class Checker {
         var response = http.send(request, HttpResponse.BodyHandlers.discarding());
         long ms = elapsedMs(start);
         int code = response.statusCode();
-        return code < 400 ? CheckOutcome.up(ms, "HTTP " + code) : CheckOutcome.down("HTTP " + code);
+        if (code >= 400) {
+            return CheckOutcome.down("HTTP " + code);
+        }
+        // su HTTPS la scadenza del certificato arriva gratis dalla stessa connessione
+        var expiry = response.sslSession()
+                .map(Checker::leafExpiry)
+                .orElse(null);
+        return expiry == null
+                ? CheckOutcome.up(ms, "HTTP " + code)
+                : CheckOutcome.withCertificate(ms, "HTTP " + code, expiry, CERT_WARNING_DAYS);
     }
 
     private CheckOutcome checkTcp(String target) throws Exception {
@@ -73,11 +81,16 @@ public class Checker {
                 // l'handshake fallisce già se il certificato è scaduto o non valido
                 ssl.startHandshake();
                 long ms = elapsedMs(start);
-                var cert = (X509Certificate) ssl.getSession().getPeerCertificates()[0];
-                long days = ChronoUnit.DAYS.between(Instant.now(), cert.getNotAfter().toInstant());
-                var message = "scade tra " + days + " giorni";
-                return days < CERT_WARNING_DAYS ? CheckOutcome.degraded(ms, message) : CheckOutcome.up(ms, message);
+                return CheckOutcome.withCertificate(ms, null, leafExpiry(ssl.getSession()), CERT_WARNING_DAYS);
             }
+        }
+    }
+
+    private static Instant leafExpiry(javax.net.ssl.SSLSession session) {
+        try {
+            return ((X509Certificate) session.getPeerCertificates()[0]).getNotAfter().toInstant();
+        } catch (javax.net.ssl.SSLPeerUnverifiedException e) {
+            return null;
         }
     }
 

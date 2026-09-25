@@ -4,6 +4,16 @@ Formato basato su [Keep a Changelog](https://keepachangelog.com/it/1.1.0/), vers
 
 ## [Non rilasciato]
 
+## [0.4.0] - 2026-09-25
+
+### Aggiunto
+- Nuova grafica "Console radio": fondo scuro, spie luminose, valori in monospazio, variante chiara automatica. Design token in `static/css/tokens.css`, font Space Grotesk e JetBrains Mono self-hosted (licenza OFL).
+- Barra dei 90 giorni per servizio con dettaglio al passaggio del mouse, disponibilità percentuale, grafico dei tempi di risposta delle ultime 24 ore.
+- Giorni alla scadenza del certificato anche per i siti HTTPS; sotto i 14 giorni il servizio diventa "attenzione".
+- Riepiloghi giornalieri (`daily_stat`, migrazione `V3`) e pulizia notturna dei controlli più vecchi di 2 giorni.
+- Variabile `STATUS_BADGE` per l'etichetta accanto al titolo.
+- Aggiornamento automatico della pagina pubblica ogni 60 secondi.
+
 ## [0.3.0] - 2026-09-25
 
 ### Aggiunto

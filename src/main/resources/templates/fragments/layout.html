@@ -3,15 +3,22 @@
 <head th:fragment="head(title)">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="light dark">
+    <meta name="color-scheme" content="dark light">
     <title th:text="${title}">Stato dei servizi</title>
     <link rel="icon" th:href="@{/favicon.svg}" type="image/svg+xml">
+    <link rel="preload" th:href="@{/fonts/space-grotesk-600.woff2}" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" th:href="@{/css/tokens.css}">
     <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
+<header th:fragment="top(clock)" class="top">
+    <h1 class="brand"><span th:text="${siteTitle}">Stato dei servizi</span>
+        <span class="callsign" th:if="${!#strings.isEmpty(siteBadge)}" th:text="${siteBadge}">IU3CYV</span></h1>
+    <small class="clock" id="clock" th:if="${clock}">aggiornato ora</small>
+</header>
 <footer th:fragment="footer" class="site-footer">
-    <span>Aggiornato automaticamente</span>
-    <span><a th:href="@{/admin}">Accesso</a> · <a href="https://github.com/wifi75/status-page" rel="noopener">Codice sorgente</a></span>
+    <a th:href="@{/admin}">Accesso</a>
+    <a href="https://github.com/wifi75/status-page" rel="noopener">Codice sorgente</a>
 </footer>
 </body>
 </html>

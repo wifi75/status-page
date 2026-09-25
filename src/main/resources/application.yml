@@ -44,6 +44,8 @@ management:
 
 status:
   site-title: ${STATUS_SITE_TITLE:Stato dei servizi}
+  # etichetta accanto al titolo, es. un nominativo; vuota = nascosta
+  badge: ${STATUS_BADGE:}
   admin:
     username: ${ADMIN_USERNAME:admin}
     # hash bcrypt, mai la password in chiaro (vedi README)

@@ -18,4 +18,9 @@ public class SiteModelAdvice {
     String siteTitle() {
         return properties.siteTitle();
     }
+
+    @ModelAttribute("siteBadge")
+    String siteBadge() {
+        return properties.badge();
+    }
 }

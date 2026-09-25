@@ -49,4 +49,9 @@ public class CheckResult {
         this.responseMs = outcome.responseMs();
         this.message = outcome.message();
     }
+
+    public Long getMonitorId() { return monitorId; }
+    public Instant getCheckedAt() { return checkedAt; }
+    public MonitorStatus getStatus() { return status; }
+    public Integer getResponseMs() { return responseMs; }
 }

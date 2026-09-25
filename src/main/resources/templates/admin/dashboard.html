@@ -1,34 +1,38 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Amministrazione')}"></head>
+<head th:replace="~{fragments/layout :: head('Servizi controllati')}"></head>
 <body>
 <main class="wrap">
-    <header class="site-header">
-        <h1>Servizi controllati</h1>
+    <header th:replace="~{fragments/layout :: top(false)}"></header>
+
+    <div class="toolbar">
+        <a class="btn btn-primary" th:href="@{/admin/monitors/new}">+ Aggiungi servizio</a>
+        <a class="btn btn-secondary" th:href="@{/}">Pagina pubblica</a>
         <form th:action="@{/logout}" method="post">
-            <button type="submit" class="btn-link">Esci</button>
+            <button type="submit" class="btn btn-ghost">Esci</button>
         </form>
-    </header>
+    </div>
 
     <p class="notice" th:if="${notice}" th:text="${notice}" role="status">Servizio aggiunto</p>
 
-    <p class="actions">
-        <a class="btn" th:href="@{/admin/monitors/new}">+ Aggiungi servizio</a>
-        <a class="btn-link" th:href="@{/}">Vai alla pagina pubblica</a>
-    </p>
+    <h2 class="sec-title"><span>Servizi controllati</span><span th:text="${monitors.size()}">3</span></h2>
 
-    <p class="empty" th:if="${monitors.isEmpty()}">Nessun servizio ancora. Aggiungi il primo con il pulsante qui sopra.</p>
+    <div class="empty-state" th:if="${monitors.isEmpty()}">
+        <p>Nessun servizio ancora.</p>
+        <a class="btn btn-primary" th:href="@{/admin/monitors/new}">Aggiungi il primo</a>
+    </div>
 
-    <ul class="monitor-list" th:unless="${monitors.isEmpty()}">
-        <li class="monitor admin-row" th:each="m : ${monitors}">
-            <span class="led" th:classappend="${m.lastStatus.cssClass()}" aria-hidden="true"></span>
-            <span class="monitor-name">
-                <a th:href="@{/admin/monitors/{id}(id=${m.id})}" th:text="${m.name}">Servizio</a>
-                <small class="monitor-target" th:text="${m.type.label() + ' · ' + m.target}">https://esempio.it</small>
-                <small class="monitor-target" th:if="${m.lastMessage}" th:text="${m.lastMessage}">HTTP 200</small>
-            </span>
-            <span class="monitor-type" th:text="${m.enabled} ? ${'ogni ' + m.intervalSeconds + ' s'} : 'disattivato'">ogni 60 s</span>
-            <span class="monitor-state" th:classappend="${m.lastStatus.cssClass()}" th:text="${m.lastStatus.label()}">operativo</span>
+    <ul class="admin-list" th:unless="${monitors.isEmpty()}">
+        <li th:each="m : ${monitors}">
+            <a class="admin-row" th:classappend="${!m.enabled} ? 'is-disabled'" th:href="@{/admin/monitors/{id}(id=${m.id})}">
+                <span class="dot" th:classappend="${m.lastStatus.cssClass()}" aria-hidden="true"></span>
+                <span class="svc-name"><th:block th:text="${m.name}">Servizio</th:block>
+                    <small class="target" th:text="${m.type.label() + ' · ' + m.target}">https://esempio.it</small>
+                    <small class="target" th:if="${m.lastMessage}" th:text="${m.lastMessage}">HTTP 200</small></span>
+                <span class="metric interval" th:text="${m.enabled} ? ${m.intervalSeconds + ' s'} : 'spento'">60 s<span>intervallo</span></span>
+                <span class="metric" th:classappend="${m.lastStatus.cssClass()}"
+                      th:text="${m.lastResponseMs != null and m.lastStatus.name() != 'DOWN'} ? ${m.lastResponseMs + ' ms'} : ${m.lastStatus.label()}">142 ms</span>
+            </a>
         </li>
     </ul>
 </main>

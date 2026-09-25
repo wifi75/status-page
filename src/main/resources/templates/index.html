@@ -2,28 +2,56 @@
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head(${siteTitle})}"></head>
 <body>
-<main class="wrap">
-    <header class="site-header">
-        <h1 th:text="${siteTitle}">Stato dei servizi</h1>
-    </header>
+<main class="wrap" th:with="hero=${dashboard.hero()}">
+    <header th:replace="~{fragments/layout :: top(true)}"></header>
 
-    <section class="summary" th:classappend="${summary.cssClass()}" aria-live="polite">
-        <span class="led" aria-hidden="true"></span>
-        <p th:text="${summary.text()}">Tutti i servizi sono operativi</p>
+    <section class="hero" th:classappend="${hero.cssClass()}" aria-live="polite">
+        <div class="beacon" aria-hidden="true"></div>
+        <div>
+            <h2 class="hero-title" th:text="${hero.title()}">Tutti i sistemi operativi</h2>
+            <p th:text="${hero.subtitle()}">6 servizi controllati</p>
+        </div>
+        <div class="hero-figure"><th:block th:text="${hero.uptime()}">99,97%</th:block><span>disponibilità 90 gg</span></div>
     </section>
 
-    <ul class="monitor-list" th:unless="${monitors.isEmpty()}">
-        <li class="monitor" th:each="m : ${monitors}">
-            <span class="led" th:classappend="${m.status().cssClass()}" aria-hidden="true"></span>
-            <span class="monitor-name" th:text="${m.name()}">Servizio</span>
-            <span class="monitor-type" th:text="${m.responseMs() != null} ? ${m.responseMs() + ' ms'} : ''">120 ms</span>
-            <span class="monitor-state" th:classappend="${m.status().cssClass()}"
-                  th:title="${m.checkedAtText().isEmpty()} ? null : ${'Ultimo controllo ' + m.checkedAtText()}"
-                  th:text="${m.status().label()}">operativo</span>
-        </li>
-    </ul>
+    <th:block th:if="${dashboard.services().isEmpty()}">
+        <p class="empty-state">Nessun servizio da mostrare.</p>
+    </th:block>
+
+    <th:block th:unless="${dashboard.services().isEmpty()}">
+        <h2 class="sec-title"><span>Servizi</span><span>90 giorni · risposta 24 h</span></h2>
+        <ul class="services">
+            <li class="svc" th:each="s : ${dashboard.services()}">
+                <div class="svc-head">
+                    <span class="dot" th:classappend="${s.status().cssClass()}" aria-hidden="true"></span>
+                    <div class="svc-name"><th:block th:text="${s.name()}">Servizio</th:block>
+                        <small th:text="${s.kind() + ' · ' + s.status().label()}">Sito web · operativo</small></div>
+                    <div class="metric cert" th:classappend="${s.certWarning()} ? 'is-warn'">
+                        <th:block th:text="${s.certDays() != null} ? ${s.certDays() + ' gg'} : '—'">61 gg</th:block><span>certificato</span></div>
+                    <div class="metric" th:classappend="${s.status().cssClass()}">
+                        <th:block th:text="${s.responseMs()}">142 ms</th:block><span th:text="${s.uptime()}">99,99%</span></div>
+                </div>
+                <div class="svc-body">
+                    <div>
+                        <div class="bars" role="img" th:aria-label="${'Disponibilità degli ultimi 90 giorni: ' + s.uptime()}">
+                            <i th:each="b : ${s.bars()}" th:class="${b.cssClass()}" th:attr="data-tip=${b.tooltip()}"></i>
+                        </div>
+                        <div class="bars-legend"><span>90 giorni fa</span><span>oggi</span></div>
+                    </div>
+                    <svg th:if="${s.spark() != null}" class="spark" viewBox="0 0 160 40" preserveAspectRatio="none"
+                         role="img" th:aria-label="${'Tempo di risposta nelle ultime 24 ore, massimo ' + s.spark().max()}">
+                        <path class="a" th:attr="d=${s.spark().area()}"/>
+                        <path class="l" th:attr="d=${s.spark().line()}"/>
+                    </svg>
+                    <p th:if="${s.spark() == null}" class="spark-empty">grafico in arrivo</p>
+                </div>
+            </li>
+        </ul>
+    </th:block>
 
     <footer th:replace="~{fragments/layout :: footer}"></footer>
 </main>
+<div class="tip" id="tip" aria-hidden="true"></div>
+<script th:src="@{/js/status.js}" defer></script>
 </body>
 </html>
