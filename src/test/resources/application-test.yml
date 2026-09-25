@@ -1,0 +1,4 @@
+spring:
+  datasource:
+    # un database nuovo per ogni contesto di test
+    url: jdbc:sqlite:target/test-${random.uuid}.db

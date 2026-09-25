@@ -20,7 +20,7 @@ jobs:
           distribution: temurin
           java-version: "25"
           cache: maven
-      - name: Test (Testcontainers + PostgreSQL)
+      - name: Test
         run: ./mvnw -B verify
 
   image:

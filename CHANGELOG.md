@@ -4,6 +4,16 @@ Formato basato su [Keep a Changelog](https://keepachangelog.com/it/1.1.0/), vers
 
 ## [Non rilasciato]
 
+## [0.2.0] - 2026-09-25
+
+### Modificato
+- Database passato da PostgreSQL a **SQLite** (file unico nel volume `/data`, modalità WAL): un solo container da gestire.
+- Test senza Docker: ogni contesto usa un file SQLite nuovo in `target/`.
+- La migrazione `V1` è stata riscritta per SQLite: nessuna installazione aveva ancora applicato la versione PostgreSQL.
+
+### Rimosso
+- Container PostgreSQL e Testcontainers.
+
 ## [0.1.0] - 2026-09-25
 
 ### Aggiunto

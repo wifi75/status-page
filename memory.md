@@ -7,5 +7,6 @@ Decisioni di progetto e il loro perché.
 - **Immagine su GHCR costruita dalla CI**: il server non compila nulla, scarica solo l'immagine.
 - **Password admin come hash bcrypt in variabile d'ambiente**: nessuna tabella utenti per un solo amministratore; senza hash l'area admin è chiusa, mai password di default.
 - **La pagina pubblica non mostra i target**: host e URL interni restano privati (`MonitorView` espone solo nome e tipo).
-- **PostgreSQL 18**: il volume si monta su `/var/lib/postgresql`, non più su `/var/lib/postgresql/data`.
-- **Test solo con database reale** (Testcontainers): girano in CI; in locale serve Docker.
+- **SQLite scelto da Tiziano** (25/09/2026) al posto di PostgreSQL: un solo container, backup = un file. Modalità WAL e pool di una connessione, perché SQLite ammette un solo scrittore.
+- **ID come `INTEGER`** (`@JdbcTypeCode`): in SQLite l'autoincremento esiste solo su `INTEGER PRIMARY KEY`, mentre Hibernate si aspetterebbe `BIGINT` e la validazione dello schema fallirebbe.
+- **Test su SQLite reale**, un file nuovo per contesto in `target/`: girano ovunque senza Docker.

@@ -8,8 +8,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "monitor")
@@ -17,6 +19,8 @@ public class Monitor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // in SQLite l'autoincremento esiste solo su INTEGER PRIMARY KEY
+    @JdbcTypeCode(SqlTypes.INTEGER)
     private Long id;
 
     @Column(nullable = false, length = 100)
@@ -38,8 +42,8 @@ public class Monitor {
     @Column(name = "display_order", nullable = false)
     private int displayOrder;
 
-    @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
-    private OffsetDateTime createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
 
     protected Monitor() {
     }
@@ -48,6 +52,7 @@ public class Monitor {
         this.name = name;
         this.type = type;
         this.target = target;
+        this.createdAt = Instant.now();
     }
 
     public Long getId() { return id; }
@@ -57,5 +62,5 @@ public class Monitor {
     public int getIntervalSeconds() { return intervalSeconds; }
     public boolean isEnabled() { return enabled; }
     public int getDisplayOrder() { return displayOrder; }
-    public OffsetDateTime getCreatedAt() { return createdAt; }
+    public Instant getCreatedAt() { return createdAt; }
 }

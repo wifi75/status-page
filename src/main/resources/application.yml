@@ -2,10 +2,13 @@ spring:
   application:
     name: status-page
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/status}
-    username: ${DB_USER:status}
-    password: ${DB_PASSWORD:}
+    # WAL: letture della pagina pubblica non bloccate dalle scritture dei controlli
+    url: jdbc:sqlite:${DB_PATH:./data/status.db}?journal_mode=WAL&busy_timeout=5000&foreign_keys=true
+    hikari:
+      # SQLite ammette un solo scrittore alla volta
+      maximum-pool-size: 1
   jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
     open-in-view: false
     hibernate:
       ddl-auto: validate

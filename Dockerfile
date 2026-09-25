@@ -10,12 +10,14 @@ RUN ./mvnw -B -q package -DskipTests \
 
 # --- runtime ---
 FROM eclipse-temurin:25.0.4_7-jre-alpine
-RUN addgroup -S app && adduser -S -G app app
+RUN addgroup -S app && adduser -S -G app app \
+ && mkdir /data && chown app:app /data
 WORKDIR /app
 COPY --from=build /extracted/dependencies/ ./
 COPY --from=build /extracted/spring-boot-loader/ ./
 COPY --from=build /extracted/snapshot-dependencies/ ./
 COPY --from=build /extracted/application/ ./
+VOLUME /data
 USER app
 EXPOSE 8080
 ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75"

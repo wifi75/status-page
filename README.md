@@ -12,25 +12,21 @@ Istanza pubblica: <https://status.iu3cyv.eu>
 |---|---|
 | Java | 25 (LTS) |
 | Spring Boot | 4.1.1 (Web MVC, Thymeleaf, Data JPA, Security, Validation, Actuator, Mail) |
-| PostgreSQL | 18.6 |
+| Database | SQLite 3.53 (file unico, modalità WAL) |
 | Migrazioni | Flyway |
-| Test | JUnit 5 + Testcontainers |
+| Test | JUnit 5 + MockMvc |
 
 ## Sviluppo locale
 
-Serve Java 25 e un PostgreSQL raggiungibile.
+Serve solo Java 25: il database è un file SQLite creato in `./data/status.db`.
 
 ```bash
-DB_PASSWORD=... ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
-Oppure, con Docker, un PostgreSQL usa e getta avviato da Testcontainers:
+Poi apri <http://localhost:8080>.
 
-```bash
-./mvnw spring-boot:test-run
-```
-
-Test (richiedono Docker):
+Test:
 
 ```bash
 ./mvnw verify
@@ -46,6 +42,8 @@ L'immagine viene costruita da GitHub Actions e pubblicata su `ghcr.io/wifi75/sta
 In Portainer: **Stacks → Add stack → Repository**, URL di questo repository, compose path `docker-compose.yml`, poi le variabili d'ambiente prese da [.env.example](.env.example). Per aggiornare: **Pull and redeploy** sullo stack (o il webhook dello stack).
 
 L'app ascolta sulla porta `APP_PORT` (default 8085) del server; l'HTTPS pubblico è gestito dal reverse proxy.
+
+Il database è il file `/data/status.db` nel volume `status-data`: è l'unica cosa da includere nei backup.
 
 ### Password admin
 
