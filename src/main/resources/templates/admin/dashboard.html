@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Amministrazione')}"></head>
+<body>
+<main class="wrap">
+    <header class="site-header">
+        <h1>Amministrazione</h1>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn-link">Esci</button>
+        </form>
+    </header>
+    <p>La gestione di servizi e incidenti arriva nella fase 3.</p>
+    <p><a th:href="@{/}">Torna alla pagina pubblica</a></p>
+</main>
+</body>
+</html>

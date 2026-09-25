@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${siteTitle})}"></head>
+<body>
+<main class="wrap">
+    <header class="site-header">
+        <h1 th:text="${siteTitle}">Stato dei servizi</h1>
+    </header>
+
+    <section class="summary" th:classappend="${monitors.isEmpty()} ? 'is-idle' : 'is-pending'" aria-live="polite">
+        <span class="led" aria-hidden="true"></span>
+        <p th:if="${monitors.isEmpty()}">Nessun servizio configurato.</p>
+        <p th:unless="${monitors.isEmpty()}">In attesa dei primi controlli.</p>
+    </section>
+
+    <ul class="monitor-list" th:unless="${monitors.isEmpty()}">
+        <li class="monitor" th:each="m : ${monitors}">
+            <span class="led is-pending" aria-hidden="true"></span>
+            <span class="monitor-name" th:text="${m.name()}">Servizio</span>
+            <span class="monitor-type" th:text="${m.type()}">HTTP</span>
+            <span class="monitor-state">in attesa</span>
+        </li>
+    </ul>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</main>
+</body>
+</html>

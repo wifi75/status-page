@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title th:text="${title}">Stato dei servizi</title>
+    <link rel="icon" th:href="@{/favicon.svg}" type="image/svg+xml">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<footer th:fragment="footer" class="site-footer">
+    <span>Aggiornato automaticamente</span>
+    <a href="https://github.com/wifi75/status-page" rel="noopener">Codice sorgente</a>
+</footer>
+</body>
+</html>

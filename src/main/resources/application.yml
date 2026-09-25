@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: status-page
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/status}
+    username: ${DB_USER:status}
+    password: ${DB_PASSWORD:}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  threads:
+    virtual:
+      enabled: true
+  thymeleaf:
+    cache: true
+
+server:
+  port: 8080
+  # dietro HAProxy su OPNsense: rispetta X-Forwarded-*
+  forward-headers-strategy: framework
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        same-site: lax
+  error:
+    include-stacktrace: never
+    include-message: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+
+status:
+  site-title: ${STATUS_SITE_TITLE:Stato dei servizi}
+  admin:
+    username: ${ADMIN_USERNAME:admin}
+    # hash bcrypt, mai la password in chiaro (vedi README)
+    password-hash: ${ADMIN_PASSWORD_HASH:}
+
+logging:
+  level:
+    root: INFO
+    eu.iu3cyv.status: INFO
