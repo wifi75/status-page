@@ -7,18 +7,19 @@
         <h1 th:text="${siteTitle}">Stato dei servizi</h1>
     </header>
 
-    <section class="summary" th:classappend="${monitors.isEmpty()} ? 'is-idle' : 'is-pending'" aria-live="polite">
+    <section class="summary" th:classappend="${summary.cssClass()}" aria-live="polite">
         <span class="led" aria-hidden="true"></span>
-        <p th:if="${monitors.isEmpty()}">Nessun servizio configurato.</p>
-        <p th:unless="${monitors.isEmpty()}">In attesa dei primi controlli.</p>
+        <p th:text="${summary.text()}">Tutti i servizi sono operativi</p>
     </section>
 
     <ul class="monitor-list" th:unless="${monitors.isEmpty()}">
         <li class="monitor" th:each="m : ${monitors}">
-            <span class="led is-pending" aria-hidden="true"></span>
+            <span class="led" th:classappend="${m.status().cssClass()}" aria-hidden="true"></span>
             <span class="monitor-name" th:text="${m.name()}">Servizio</span>
-            <span class="monitor-type" th:text="${m.type()}">HTTP</span>
-            <span class="monitor-state">in attesa</span>
+            <span class="monitor-type" th:text="${m.responseMs() != null} ? ${m.responseMs() + ' ms'} : ''">120 ms</span>
+            <span class="monitor-state" th:classappend="${m.status().cssClass()}"
+                  th:title="${m.checkedAtText().isEmpty()} ? null : ${'Ultimo controllo ' + m.checkedAtText()}"
+                  th:text="${m.status().label()}">operativo</span>
         </li>
     </ul>
 

@@ -4,7 +4,18 @@ Pagina pubblica sullo stato dei servizi: controlla periodicamente siti e servizi
 
 Istanza pubblica: <https://status.iu3cyv.eu>
 
-> Stato: **fase 1** — base del progetto e catena di deploy. I controlli arrivano nella fase 2 (vedi [TODO.md](TODO.md)).
+> Stato: servizi gestibili dall'area admin e controllati automaticamente. Storico a 90 giorni e notifiche in arrivo (vedi [TODO.md](TODO.md)).
+
+## Come si aggiungono i servizi
+
+1. Apri `/admin` (link **Accesso** in fondo alla pagina) ed entra con l'utente admin.
+2. **+ Aggiungi servizio**: nome pubblico, tipo di controllo e indirizzo.
+   - *Sito web*: `https://esempio.it`
+   - *Porta TCP*: `192.168.1.10:22`
+   - *Scadenza certificato TLS*: `esempio.it` (porta 443) o `esempio.it:8443`
+3. Entro pochi secondi parte il primo controllo; poi si ripete all'intervallo scelto.
+
+L'indirizzo resta privato: sulla pagina pubblica compaiono solo nome, stato e tempo di risposta.
 
 ## Stack
 

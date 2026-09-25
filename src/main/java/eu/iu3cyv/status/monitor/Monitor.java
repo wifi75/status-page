@@ -45,6 +45,19 @@ public class Monitor {
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "last_status", nullable = false, length = 20)
+    private MonitorStatus lastStatus = MonitorStatus.PENDING;
+
+    @Column(name = "last_checked_at")
+    private Instant lastCheckedAt;
+
+    @Column(name = "last_response_ms")
+    private Integer lastResponseMs;
+
+    @Column(name = "last_message", length = 300)
+    private String lastMessage;
+
     protected Monitor() {
     }
 
@@ -55,6 +68,33 @@ public class Monitor {
         this.createdAt = Instant.now();
     }
 
+    /** Applica i dati del modulo admin; un nuovo target riparte da "in attesa". */
+    void update(String name, MonitorType type, String target, int intervalSeconds, boolean enabled, int displayOrder) {
+        if (this.type != type || !target.equals(this.target)) {
+            this.lastStatus = MonitorStatus.PENDING;
+            this.lastCheckedAt = null;
+            this.lastResponseMs = null;
+            this.lastMessage = null;
+        }
+        this.name = name;
+        this.type = type;
+        this.target = target;
+        this.intervalSeconds = intervalSeconds;
+        this.enabled = enabled;
+        this.displayOrder = displayOrder;
+    }
+
+    void recordCheck(CheckOutcome outcome, Instant at) {
+        this.lastStatus = outcome.status();
+        this.lastCheckedAt = at;
+        this.lastResponseMs = outcome.responseMs();
+        this.lastMessage = outcome.message();
+    }
+
+    boolean isDue(Instant now) {
+        return lastCheckedAt == null || !lastCheckedAt.plusSeconds(intervalSeconds).isAfter(now);
+    }
+
     public Long getId() { return id; }
     public String getName() { return name; }
     public MonitorType getType() { return type; }
@@ -63,4 +103,8 @@ public class Monitor {
     public boolean isEnabled() { return enabled; }
     public int getDisplayOrder() { return displayOrder; }
     public Instant getCreatedAt() { return createdAt; }
+    public MonitorStatus getLastStatus() { return lastStatus; }
+    public Instant getLastCheckedAt() { return lastCheckedAt; }
+    public Integer getLastResponseMs() { return lastResponseMs; }
+    public String getLastMessage() { return lastMessage; }
 }

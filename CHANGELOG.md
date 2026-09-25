@@ -4,6 +4,15 @@ Formato basato su [Keep a Changelog](https://keepachangelog.com/it/1.1.0/), vers
 
 ## [Non rilasciato]
 
+## [0.3.0] - 2026-09-25
+
+### Aggiunto
+- Area admin: aggiunta, modifica ed eliminazione dei servizi, con validazione dell'indirizzo in base al tipo.
+- Controlli automatici su virtual thread: sito web (HTTP/HTTPS), porta TCP, scadenza del certificato TLS (degradato sotto i 14 giorni).
+- Stato attuale e storico dei controlli (tabella `check_result`, migrazione `V2`).
+- Pagina pubblica con spia per servizio, tempo di risposta e stato complessivo.
+- Pagina di login in italiano e link "Accesso" nel piè di pagina.
+
 ## [0.2.0] - 2026-09-25
 
 ### Modificato

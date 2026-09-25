@@ -29,8 +29,8 @@ public class SecurityConfig {
                         .requestMatchers("/", "/css/**", "/favicon.svg", "/error", "/actuator/health").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().denyAll())
-                .formLogin(form -> form.defaultSuccessUrl("/admin", true))
-                .logout(logout -> logout.logoutSuccessUrl("/"))
+                .formLogin(form -> form.loginPage("/login").permitAll().defaultSuccessUrl("/admin", true))
+                .logout(logout -> logout.logoutSuccessUrl("/login?logout"))
                 .headers(headers -> headers
                         .contentSecurityPolicy(csp -> csp.policyDirectives(CSP))
                         .referrerPolicy(ref -> ref.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))

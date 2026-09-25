@@ -7,4 +7,6 @@ import java.util.List;
 public interface MonitorRepository extends JpaRepository<Monitor, Long> {
 
     List<Monitor> findByEnabledTrueOrderByDisplayOrderAscNameAsc();
+
+    List<Monitor> findAllByOrderByDisplayOrderAscNameAsc();
 }

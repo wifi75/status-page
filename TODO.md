@@ -6,13 +6,13 @@
 - [ ] Stack su Portainer (192.168.1.207) e frontend HAProxy per status.iu3cyv.eu
 
 ## Fase 2 — controlli e storico
-- [ ] Controlli pianificati HTTP, TCP, scadenza certificato TLS (virtual thread)
-- [ ] Tabella risultati, stato attuale, tempi di risposta
+- [x] Controlli pianificati HTTP, TCP, scadenza certificato TLS (virtual thread)
+- [x] Tabella risultati, stato attuale, tempi di risposta
 - [ ] Barra dei 90 giorni e percentuale di disponibilità
 - [ ] Pulizia automatica dei risultati vecchi
 
 ## Fase 3 — admin, incidenti, notifiche
-- [ ] CRUD servizi con validazione
+- [x] CRUD servizi con validazione
 - [ ] Incidenti con aggiornamenti pubblicati sulla pagina
 - [ ] Notifiche Telegram ed email su cambio di stato
 - [ ] Limite tentativi di login

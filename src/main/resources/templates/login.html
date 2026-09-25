@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Accesso')}"></head>
+<body>
+<main class="wrap narrow">
+    <header class="site-header">
+        <h1>Accesso amministratore</h1>
+    </header>
+
+    <p class="field-error" th:if="${param.error}" role="alert">Nome utente o password non corretti.</p>
+    <p class="notice" th:if="${param.logout}" role="status">Sei uscito.</p>
+
+    <form class="card form" method="post" th:action="@{/login}">
+        <label for="username">Nome utente</label>
+        <input id="username" name="username" type="text" autocomplete="username" required autofocus>
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+
+        <button type="submit" class="btn">Entra</button>
+    </form>
+
+    <p><a class="btn-link" th:href="@{/}">Torna alla pagina pubblica</a></p>
+</main>
+</body>
+</html>

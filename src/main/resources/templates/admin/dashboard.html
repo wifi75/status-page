@@ -4,13 +4,33 @@
 <body>
 <main class="wrap">
     <header class="site-header">
-        <h1>Amministrazione</h1>
+        <h1>Servizi controllati</h1>
         <form th:action="@{/logout}" method="post">
             <button type="submit" class="btn-link">Esci</button>
         </form>
     </header>
-    <p>La gestione di servizi e incidenti arriva nella fase 3.</p>
-    <p><a th:href="@{/}">Torna alla pagina pubblica</a></p>
+
+    <p class="notice" th:if="${notice}" th:text="${notice}" role="status">Servizio aggiunto</p>
+
+    <p class="actions">
+        <a class="btn" th:href="@{/admin/monitors/new}">+ Aggiungi servizio</a>
+        <a class="btn-link" th:href="@{/}">Vai alla pagina pubblica</a>
+    </p>
+
+    <p class="empty" th:if="${monitors.isEmpty()}">Nessun servizio ancora. Aggiungi il primo con il pulsante qui sopra.</p>
+
+    <ul class="monitor-list" th:unless="${monitors.isEmpty()}">
+        <li class="monitor admin-row" th:each="m : ${monitors}">
+            <span class="led" th:classappend="${m.lastStatus.cssClass()}" aria-hidden="true"></span>
+            <span class="monitor-name">
+                <a th:href="@{/admin/monitors/{id}(id=${m.id})}" th:text="${m.name}">Servizio</a>
+                <small class="monitor-target" th:text="${m.type.label() + ' · ' + m.target}">https://esempio.it</small>
+                <small class="monitor-target" th:if="${m.lastMessage}" th:text="${m.lastMessage}">HTTP 200</small>
+            </span>
+            <span class="monitor-type" th:text="${m.enabled} ? ${'ogni ' + m.intervalSeconds + ' s'} : 'disattivato'">ogni 60 s</span>
+            <span class="monitor-state" th:classappend="${m.lastStatus.cssClass()}" th:text="${m.lastStatus.label()}">operativo</span>
+        </li>
+    </ul>
 </main>
 </body>
 </html>
