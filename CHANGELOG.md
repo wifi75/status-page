@@ -4,6 +4,9 @@ Formato basato su [Keep a Changelog](https://keepachangelog.com/it/1.1.0/), vers
 
 ## [Non rilasciato]
 
+### Modificato
+- I test usano SQLite in memoria: niente più file `test-*.db` accumulati in `target/`.
+
 ## [0.4.0] - 2026-09-25
 
 ### Aggiunto

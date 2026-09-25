@@ -1,7 +1,8 @@
 spring:
   datasource:
-    # un database nuovo per ogni contesto di test
-    url: jdbc:sqlite:target/test-${random.uuid}.db
+    # database in memoria, uno per contesto di test: non lascia file su disco.
+    # Resta vivo finché il pool (una connessione) lo tiene aperto.
+    url: jdbc:sqlite:file:test-${random.uuid}?mode=memory&cache=shared
 
 status:
   # i test non devono fare controlli di rete
